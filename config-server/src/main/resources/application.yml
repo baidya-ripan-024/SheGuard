@@ -1,0 +1,29 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: config-server
+
+  # Set the profile to native, or else Spring tries to use the default Git-based config server mode.
+  profiles:
+    active: native
+
+  # configuration for local config server
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: classpath:/config/
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      default-zone: http://localhost:8761/eureka/
+
+  instance:
+    prefer-ip-address: true
+    hostname: localhost
+    ip-address: 127.0.0.1
+    instance-id: ${spring.application.name}:${random.value}
