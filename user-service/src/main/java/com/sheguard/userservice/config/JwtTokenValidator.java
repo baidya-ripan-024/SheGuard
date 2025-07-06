@@ -14,6 +14,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.crypto.SecretKey;
@@ -22,6 +24,7 @@ import java.util.List;
 
 @Slf4j
 public class JwtTokenValidator extends OncePerRequestFilter {
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -65,7 +68,9 @@ public class JwtTokenValidator extends OncePerRequestFilter {
             List<GrantedAuthority> grantedAuthorities = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
 
             // Create an authentication object
-            Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, grantedAuthorities);
+            UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(email, null, grantedAuthorities);
+            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
             // Set the authentication object in the security context
             SecurityContextHolder.getContext().setAuthentication(authentication);
