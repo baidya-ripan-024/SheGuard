@@ -1,6 +1,8 @@
 package com.sheguard.userservice.controller;
 
+import com.sheguard.userservice.dto.AddressDto;
 import com.sheguard.userservice.dto.UserDto;
+import com.sheguard.userservice.service.AddressService;
 import com.sheguard.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,11 +21,19 @@ import java.util.List;
 public class AdminController {
 
     private final UserService userService;
+    private final AddressService addressService;
 
     @GetMapping("/users")
     public ResponseEntity<List<UserDto>> getAllUsers() {
         List<UserDto> users = userService.findAllUser();
 
         return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    @GetMapping("/addresses")
+    public ResponseEntity<List<AddressDto>> getAllUserAddresses() {
+        List<AddressDto> addresses = addressService.getAllUserAddresses();
+
+        return new ResponseEntity<>(addresses, HttpStatus.OK);
     }
 }
